@@ -1,0 +1,56 @@
+"""API request/response schemas (Pydantic) mapped to/from the pure-domain models."""
+
+from __future__ import annotations
+
+from pydantic import BaseModel
+
+from ..domain.models import SurveillanceCase
+
+
+class AlertRequest(BaseModel):
+    subject: str
+    text: str
+
+
+class CitationModel(BaseModel):
+    source_id: str
+    title: str
+    snippet: str = ""
+
+
+class SurveillanceResponse(BaseModel):
+    case_id: str
+    subject: str
+    instrument: str
+    severity: str
+    disposition: str
+    summary: str
+    requires_human_review: bool
+    #: Where the escalation WENT (rule R8): the Hrz7 review id, or the local queue reference.
+    #: Empty only when the case did not escalate. A caller can tell a routed escalation from a
+    #: flag that stopped here, which is the whole point of the rule.
+    review_ref: str = ""
+    citations: list[CitationModel] = []
+
+    @classmethod
+    def from_domain(cls, result: SurveillanceCase, *, review_ref: str = "") -> SurveillanceResponse:
+        return cls(
+            case_id=result.case_id,
+            subject=result.subject,
+            instrument=result.instrument,
+            severity=result.severity.value,
+            disposition=result.disposition.value,
+            summary=result.summary,
+            requires_human_review=result.requires_human_review,
+            review_ref=review_ref,
+            citations=[
+                CitationModel(source_id=c.source_id, title=c.title, snippet=c.snippet)
+                for c in result.citations
+            ],
+        )
+
+
+class HealthResponse(BaseModel):
+    status: str
+    profile: str
+    region: str

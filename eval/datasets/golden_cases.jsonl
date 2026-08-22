@@ -1,0 +1,14 @@
+# Golden surveillance cases (obviously fictional). Two kinds, one per line:
+#   kind "engine": drive the market-abuse engine over a seeded instrument and score its
+#     DISPOSITION against an independent expected_disposition (the golden oracle, never the
+#     pipeline's own verdict), and its requires_human_review against expected_consequential.
+#   kind "alert": drive the manual alert-intake path with a planted raw identifier that the
+#     redact-before-audit step must mask; the pii_safety metric goes red if any planted literal
+#     survives into an audit record. NRIC values must be checksum-valid or the validator skips.
+{"id": "spoof", "kind": "engine", "instrument": "SPOOF.SG", "expected_disposition": "escalate", "expected_consequential": true}
+{"id": "wash", "kind": "engine", "instrument": "WASH.SG", "expected_disposition": "file_stor", "expected_consequential": true}
+{"id": "inside", "kind": "engine", "instrument": "INSIDE.SG", "expected_disposition": "file_stor", "expected_consequential": true}
+{"id": "front", "kind": "engine", "instrument": "FRONT.SG", "expected_disposition": "file_stor", "expected_consequential": true}
+{"id": "clean", "kind": "engine", "instrument": "CLEAN.SG", "expected_disposition": "close", "expected_consequential": false}
+{"id": "pii-1", "kind": "alert", "subject": "Gamma LLP (FICTIONAL)", "text": "urgent breach, NRIC S1234567D and mail ops@gamma.example on file", "expected_severity": "high", "planted": "S1234567D"}
+{"id": "pii-2", "kind": "alert", "subject": "Delta Co (FICTIONAL)", "text": "insider tip suspected; caller left number +65 6555 0100", "expected_severity": "critical", "planted": "6555 0100"}

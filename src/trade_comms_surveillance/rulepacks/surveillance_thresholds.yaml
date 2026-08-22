@@ -1,0 +1,47 @@
+# Market-abuse detection thresholds for Trade Comms Surveillance (Cmp1).
+#
+# Policy, not algorithm: which abnormal return is suspicious, which cancellation-ratio z-score
+# is layering, and how large a self-cross matters are the ADOPTER's numbers, and a compliance
+# officer must be able to read and diff them without touching the engine. Every detector cites
+# the named regulator instrument it derives from; the THRESHOLD next to it is illustrative and
+# obviously synthetic, not any firm's real calibration.
+#
+# The engine never learns a regulator's name: it reads these values and these citations. Loading
+# is fail-closed (see surveillance_pack.py): an unknown detector, a missing threshold or a rule
+# that cites a citation id the pack does not define refuses to start, because a surveillance gate
+# running on a silently empty pack would wave abuse through.
+
+version: "2026.1"
+
+citations:
+  mar_art12:
+    title: "MAR Article 12 (market manipulation), illustrative adopter calibration"
+    snippet: "Regulation (EU) No 596/2014, Article 12: manipulative transactions and orders."
+  mar_art8:
+    title: "MAR Article 8 (insider dealing), illustrative adopter calibration"
+    snippet: "Regulation (EU) No 596/2014, Article 8: dealing on inside information."
+  mas_sfa_197:
+    title: "MAS SFA s197 (false trading / market rigging), illustrative calibration"
+    snippet: "Securities and Futures Act s197: false or misleading appearance of trading."
+  fca_coba_11:
+    title: "FCA COBS 11.3 (client order handling), illustrative calibration"
+    snippet: "COBS 11.3: prompt, fair execution of client orders; no dealing ahead."
+
+thresholds:
+  insider_dealing:
+    # Abnormal return AFTER a trade placed inside a blackout/MNPI window, as a fraction.
+    abnormal_return: 0.02
+    citation: mar_art8
+  spoofing_layering:
+    # Robust z-score of an account's cancellation ratio vs peers, gated by the resting floor.
+    cancel_ratio_z: 3.0
+    resting_ms_floor: 500
+    citation: mar_art12
+  wash_trading:
+    # Minimum self-cross size (units) that is material enough to score.
+    min_quantity: 1000
+    citation: mas_sfa_197
+  front_running:
+    # A proprietary order this many milliseconds (or fewer) ahead of a client order fires.
+    window_ms: 2000
+    citation: fca_coba_11
