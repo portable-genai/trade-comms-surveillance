@@ -165,7 +165,7 @@ the seams those integrations switch into:
   collector when `OTEL_EXPORTER_OTLP_ENDPOINT` is set and to Cloud Trace when it is not. Spans
   carry STRUCTURAL attributes only, never a subject, an instrument or a transcript snippet.
 - **Hrz7** human-review / maker-checker console: every consequential case is routed to it over
-  the shared `review-kit` (rule R8); you wire your endpoint (`HRZ_HUMAN_REVIEW_URL`), you do
+  the shared `review-kit` (rule R8); you wire your endpoint (`HUMAN_REVIEW_URL`), you do
   not re-implement the queue. A STOR is filed by a human from there, never by this service.
 
 The speech boundary is also not this repo's to own: the transcription and diarization ports and

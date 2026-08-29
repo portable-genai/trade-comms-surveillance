@@ -89,7 +89,7 @@ on the A2A card at `/.well-known/agent-card.json`.
 | Agent discovery and entitlements | **Hrz3** agent registry | this agent publishes a card; the registry owns discovery. |
 | Model and agent promotion | **Hrz4** AI quality and model risk | `eval/run_eval.py --mode gate` asks Hrz4 (`TRADECOMMS_QUALITY_URL`); the offline smoke mode never promotes. |
 | Traces and the immutable audit sink | **Hrz5** agent observability | `AuditSinkPort` and `ObservabilityTracerPort`; the managed tracer exports OTLP to the Hrz5 collector when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. |
-| Case review, maker-checker and STOR filing | **Hrz7** human review console | `ReviewRouterPort` over the shared `review-kit` (`HRZ_HUMAN_REVIEW_URL`). This repo produces recommendations; a human files from there. |
+| Case review, maker-checker and STOR filing | **Hrz7** human review console | `ReviewRouterPort` over the shared `review-kit` (`HUMAN_REVIEW_URL`). This repo produces recommendations; a human files from there. |
 | Prompt-injection defence and output filtering | **Hrz1** agent guardrail gateway | not wired, and not engaged today because no model is in the path. It becomes mandatory the moment a narration adapter is added and a transcript could reach it (rule R1). |
 | Grounded retrieval over an enterprise corpus | **Hrz2** enterprise knowledge base | not wired and not in the request path. The regulator instruments this engine cites come from the threshold pack, not from retrieval. |
 
