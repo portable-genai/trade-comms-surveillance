@@ -96,8 +96,8 @@ It is guarded, and the guard is inside the gate. A demo step lives in `demo.STEP
 demo makes but nobody verifies cannot exist. The same test also asserts that every `*.py` in
 `scripts/` is described in `scripts/README.md`, so the demo surface cannot silently grow an
 undocumented tool. `make demo-selftest` runs the whole arc headless over the real loopback server
-and exits non-zero when a claim stops being true; the demo-gate workflow runs it,
-`make portability`, `make demo-static` and `make docs-check` on every push. If you diverge, keep
+and exits non-zero when a claim stops being true; the hosted check runs it and
+`make portability` on every pull request and every push to main. If you diverge, keep
 the step keys and the `facts` dict the checks read.
 
 ### The eval reports 1.000. Should we believe it?
