@@ -1,12 +1,12 @@
 """Conduct-alert intake: the deterministic manual-alert surface (pure bands, redact-before-audit).
 
-The compact companion to the market-abuse engine. An analyst logs a free-text alert about a
-party; this service scores the note into a severity band with pure stdlib keyword rules (no model
-produces the band), maps the band to a surveillance disposition, redacts before the audit write
-(R1/P-04), cites the note, and sets ``requires_human_review`` on every consequential disposition
-so the driving layer routes it to Hrz7 (rule R8). The structured order-book detection lives in
-``surveillance_service.py`` and ``abuse_patterns.py``; this path is for the manual alert an
-analyst raises before there is a window to replay.
+The compact companion to the market-abuse engine. An analyst logs a free-text alert about a party;
+this service scores the note into a severity band with pure stdlib keyword rules (no model produces
+the band), maps the band to a surveillance disposition, redacts before the audit write (R1/P-04),
+cites the note, and sets ``requires_human_review`` on every consequential disposition so the driving
+layer routes it to human-review-console (rule R8). The structured order-book detection lives in
+``surveillance_service.py`` and ``abuse_patterns.py``; this path is for the manual alert an analyst
+raises before there is a window to replay.
 """
 
 from __future__ import annotations

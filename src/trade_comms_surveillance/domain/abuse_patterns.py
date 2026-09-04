@@ -7,9 +7,10 @@ a score or a verdict here. Thresholds are NOT engine constants: they arrive as a
 ``surveillance_pack.py``), because which order-to-trade ratio is suspicious and how large an
 abnormal return matters are policy the client owns, not algorithm.
 
-Baseline deviation uses the robust median / MAD z-score (the same shape Mkt4's anomaly service
-uses): the median and the median absolute deviation resist the outliers that a mean would chase,
-so a single spoofer cannot raise the bar that hides them.
+Baseline deviation uses the robust median / MAD z-score (the same shape
+performance-marketing-optimisation's anomaly service uses): the median and the median absolute
+deviation resist the outliers that a mean would chase, so a single spoofer cannot raise the bar that
+hides them.
 """
 
 from __future__ import annotations

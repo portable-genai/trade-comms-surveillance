@@ -47,7 +47,7 @@ the token switched the guard off for the end-user routes it was protecting.
 
 No. Six managed operations in this repo are construction-only placeholders that raise (the three
 Firestore case-store methods, the BigQuery market-data window, the managed comms-transcript feed
-and the Rgc11 reference snapshot). `src/trade_comms_surveillance/managed_readiness.py` lists them
+and the `conflicts-gifts-pad-register` reference snapshot). `src/trade_comms_surveillance/managed_readiness.py` lists them
 by name; `assert_managed_profile_ready` refuses to let a `gcp` or `platform` process start when
 the bound adapter map selects one of them, and it is called both from the API preflight
 (`api/app.py`) and from the container command in the Dockerfile, so it runs before Uvicorn does.
@@ -63,7 +63,7 @@ It is the most sensitive data surface here, and it is handled in four places rat
   summary before the `AuditEvent` is constructed, and the alert-intake path does the same. No raw
   identifier reaches the WORM record.
 - **Redaction before anything leaves the process.** `adapters/_review_payload.py` masks against
-  EVERY jurisdiction's rows, because the Hrz7 console is a shared sink; `agent/tools.py` masks a
+  EVERY jurisdiction's rows, because the `human-review-console` is a shared sink; `agent/tools.py` masks a
   tool result before it returns.
 - **A hit carries a cue, not a person.** `CommsHit` records the matched conduct phrase and its
   turn index, not the surrounding text, so a flagged case does not drag the conversation with it.
@@ -82,7 +82,7 @@ comms scan runs identically on a redacted or a raw transcript, so redaction cost
 There is no model. No generation port, no narration port, no prompt anywhere in the tree; the
 case narrative is a string builder. That is the whole answer today, and
 [`../model-card.md`](../model-card.md) records the eight boundary rules any future narration
-adapter would have to satisfy, starting with Hrz1 prompt-injection screening (rule R1) because a
+adapter would have to satisfy, starting with `agent-guardrail-gateway` prompt-injection screening (rule R1) because a
 recorded-comms transcript is free text written by the people under surveillance.
 
 ### How is the audit trail protected?
@@ -112,10 +112,10 @@ expression cannot tell apart.
   forwards the assertion without parsing or trusting a parsed copy.
 - **Real-time streaming speech to text.** Post-trade review is batch; streaming belongs to the
   real-time verticals, which is why the speech ports are re-exported rather than bound.
-- **The restricted list itself.** Owned by Rgc11; this repo reads a dated snapshot.
-- **The review queue and the STOR filing.** Owned by Hrz7 and by a human; this repo produces
+- **The restricted list itself.** Owned by `conflicts-gifts-pad-register`; this repo reads a dated snapshot.
+- **The review queue and the STOR filing.** Owned by `human-review-console` and by a human; this repo produces
   recommendations and routes them.
 - **Network egress control.** VPC-SC governs access to Google APIs across perimeters, not
-  arbitrary internet egress. The private-egress rule that lets this service reach the Rgc11 feed
-  and the Hrz7 console and nothing else is an adopter network decision, called out in
+  arbitrary internet egress. The private-egress rule that lets this service reach the `conflicts-gifts-pad-register` feed
+  and the `human-review-console` and nothing else is an adopter network decision, called out in
   `COMPLIANCE.md` P-01.

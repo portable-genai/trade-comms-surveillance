@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-"""Evaluation gate for Trade Comms Surveillance (Cmp1).
+"""Evaluation gate for Trade Comms Surveillance (trade-comms-surveillance).
 
 Two named layers via ``--mode`` (the scaffold is ``agent_eval_kit.eval_main``):
 
 * **smoke** (default) - the offline pre-merge check CI runs on every change: it drives the REAL
-  deterministic engine and the alert-intake path against a golden set with SDK-free local
-  adapters and scores four metrics.
-* **gate** - the promotion verdict from the shared Hrz4 authority (requires the ``gcp`` profile),
-  via ``agent_eval_kit.PromotionGateClient``.
+  deterministic engine and the alert-intake path against a golden set with SDK-free local adapters
+  and scores four metrics. * **gate** - the promotion verdict from the shared model-quality-gate
+  authority (requires the ``gcp`` profile), via ``agent_eval_kit.PromotionGateClient``.
 
 Every metric scores against the DATASET'S OWN expected_outcome, an independent golden oracle,
 never the pipeline's own verdict. ``tests/unit/test_not_falsely_green.py`` wires
@@ -44,7 +43,8 @@ THRESHOLDS: dict[str, float] = {
     "groundedness": 1.0,
     "pii_safety": 0.99,
 }
-#: The registered Hrz4 metric bundle for this vertical (Hrz4 owns the metrics + thresholds).
+#: The registered model-quality-gate metric bundle for this vertical (model-quality-gate owns the
+#: metrics + thresholds).
 _BUNDLE = "trade-comms-surveillance"
 
 _NUMBER = re.compile(r"-?\d+\.?\d*")
@@ -209,6 +209,6 @@ if __name__ == "__main__":
             smoke=run_smoke,
             gate=run_gate,
             default_dataset=DEFAULT_DATASET,
-            description="Offline / Hrz4 evaluation gate for Cmp1.",
+            description="Offline / model-quality-gate for trade-comms-surveillance.",
         )
     )

@@ -1,6 +1,6 @@
 # Adopting this repo as your base
 
-This repository (Cmp1, Trade Comms Surveillance) is a **common base** that a bank, broker or
+This repository (`trade-comms-surveillance`, Trade Comms Surveillance) is a **common base** that a bank, broker or
 other regulated firm forks to build its own **post-trade market-abuse surveillance engine**: a
 service that replays a dated order and trade window against a restricted-list snapshot, scores
 four abuse patterns deterministically, scans the recorded comms for conduct cues, links accounts
@@ -26,17 +26,17 @@ The core is hexagonal, and the boundary between reusable machinery and the surve
 is a physical module split with an enforced dependency direction (practices-audit check A7).
 `domain/kernel.py` owns the vertical-neutral contracts and imports nothing from the vertical, so
 you can import it without loading a line of market-abuse logic; `domain/models.py` holds only the
-Cmp1 artifacts.
+`trade-comms-surveillance` artifacts.
 
 | Layer | Where | For a new surveillance vertical |
 |---|---|---|
 | **Vertical-neutral machinery** | `domain/kernel.py` (`Citation`, `AuditEvent`, `Severity`, `Decision`, `Disposition`, `utcnow`), every Protocol in `ports/`, the container wiring in `config.py` | keep untouched |
 | **Policy (your numbers and words)** | the threshold pack at `src/trade_comms_surveillance/rulepacks/surveillance_thresholds.yaml` (already adopter-owned and selectable by path), the cue phrases in `domain/lexicon.py`, the `_SEVERITY_KEYWORDS` and `_BAND_DISPOSITION` tables in `domain/alert_intake_service.py`, the jurisdiction rows in `domain/pii.py`, the metric thresholds in `eval/run_eval.py` | change deliberately (see section 4) |
-| **Vertical (the artifacts themselves)** | the Cmp1 models in `domain/models.py` (`Order`, `Trade`, `MarketWindow`, `RestrictedReference`, `AbuseSignal`, `CommsHit`, `ProximityEdge`, `SurveillanceCase`), the four detectors in `domain/abuse_patterns.py`, `domain/comms_scan.py`, `domain/collusion_graph.py`, the orchestrators (`domain/surveillance_service.py`, `pipeline.py`), the local fixture book replay and the eval golden set | rewrite for your patterns |
+| **Vertical (the artifacts themselves)** | the `trade-comms-surveillance` models in `domain/models.py` (`Order`, `Trade`, `MarketWindow`, `RestrictedReference`, `AbuseSignal`, `CommsHit`, `ProximityEdge`, `SurveillanceCase`), the four detectors in `domain/abuse_patterns.py`, `domain/comms_scan.py`, `domain/collusion_graph.py`, the orchestrators (`domain/surveillance_service.py`, `pipeline.py`), the local fixture book replay and the eval golden set | rewrite for your patterns |
 
 If your product is another *replay a dated window, score it deterministically, cite it, escalate
 it* gate, most of the hexagon, the three profiles, the fail-closed pack loader, the eval gate and
-the Hrz7 review routing transfer directly; you replace the detectors and the reference feeds, and
+the `human-review-console` review routing transfer directly; you replace the detectors and the reference feeds, and
 retune the pack.
 
 ## 2. Core-vs-adopter-owned files (so upstream merges stay mechanical)
@@ -85,7 +85,7 @@ would refuse fails here instead of at plan time. `--package` must be a valid sna
 identifier. Add `--include-docs` to sweep Markdown prose too; without it the script leaves `.md`
 files alone so a code rename stays deterministic. The script skips itself, so the renamer is not
 left half-rewritten, and it renames `src/trade_comms_surveillance/` last, after the file contents
-are rewritten. The catalog id `Cmp1` is left alone unless you pass `--catalog-id`, so a fork
+are rewritten. The catalog id `trade-comms-surveillance` is left alone unless you pass `--catalog-id`, so a fork
 stays traceable to the entry it descends from. The script deliberately does NOT touch the human
 decisions below.
 
@@ -151,20 +151,20 @@ owned by sibling platform services, and you should integrate rather than rebuild
 [`faq/features-faq.md`](faq/features-faq.md) for the full map). The `gcp` profile's adapters are
 the seams those integrations switch into:
 
-- **Rgc11** conflicts, gifts and PAD register: the restricted-list, blackout and MNPI reference
+- `conflicts-gifts-pad-register` conflicts, gifts and PAD register: the restricted-list, blackout and MNPI reference
   data this engine scores against, over `RestrictedReferencePort`
-  (`adapters/gcp/restricted_reference.py`, an A2A client). The reference data is Rgc11's; this
+  (`adapters/gcp/restricted_reference.py`, an A2A client). The reference data is `conflicts-gifts-pad-register`'s; this
   repo reads a dated snapshot and never keeps a second register.
-- **Hrz3** agent registry: this agent publishes its A2A card at
+- `agent-registry`: this agent publishes its A2A card at
   `/.well-known/agent-card.json`; register it rather than inventing a discovery mechanism.
-- **Hrz4** AI-quality / model-risk gate: owns promotion. `eval/run_eval.py --mode gate` is the
+- `model-quality-gate` AI-quality / model-risk gate: owns promotion. `eval/run_eval.py --mode gate` is the
   client half (`TRADECOMMS_QUALITY_URL`) and refuses to run off the managed profile; the offline
   smoke mode mirrors the thresholds but never promotes.
-- **Hrz5** observability plus immutable WORM audit: audit events and trace spans go to it via
-  `AuditSinkPort` and `ObservabilityTracerPort`. The managed tracer exports OTLP to the Hrz5
+- `agent-observability` plus immutable WORM audit: audit events and trace spans go to it via
+  `AuditSinkPort` and `ObservabilityTracerPort`. The managed tracer exports OTLP to the `agent-observability`
   collector when `OTEL_EXPORTER_OTLP_ENDPOINT` is set and to Cloud Trace when it is not. Spans
   carry STRUCTURAL attributes only, never a subject, an instrument or a transcript snippet.
-- **Hrz7** human-review / maker-checker console: every consequential case is routed to it over
+- `human-review-console` human-review / maker-checker console: every consequential case is routed to it over
   the shared `review-kit` (rule R8); you wire your endpoint (`HUMAN_REVIEW_URL`), you do
   not re-implement the queue. A STOR is filed by a human from there, never by this service.
 
@@ -174,8 +174,8 @@ the transcript types come from the pinned `speech-lexicon-kit` and are re-export
 reads recorded comms. Streaming speech to text is deliberately out of scope; post-trade review is
 batch.
 
-The guardrail gateway (Hrz1) is **not** integrated, and neither is the enterprise knowledge base
-(Hrz2). Neither is engaged today because no model is in the path at all. Hrz1 becomes mandatory
+The guardrail gateway (`agent-guardrail-gateway`) is **not** integrated, and neither is the enterprise knowledge base
+(`enterprise-knowledge-base`). Neither is engaged today because no model is in the path at all. `agent-guardrail-gateway` becomes mandatory
 the moment a narration adapter is added and a transcript reaches it: see rule R1 in
 [`../COMPLIANCE.md`](../COMPLIANCE.md) and [`model-card.md`](model-card.md).
 
@@ -188,7 +188,7 @@ the moment a narration adapter is added and a transcript reaches it: see rule R1
 - [ ] Wrote your own threshold pack and pointed `TRADECOMMS_PACK_PATH` at it, keeping the
       fail-closed loader and the mandatory citation per detector.
 - [ ] Replaced the cue phrases in `domain/lexicon.py` with your reviewed conduct vocabulary.
-- [ ] Pointed `RestrictedReferencePort` at Rgc11 (or your own restricted-list source) and bound
+- [ ] Pointed `RestrictedReferencePort` at `conflicts-gifts-pad-register` (or your own restricted-list source) and bound
       your real market-data and comms feeds.
 - [ ] Owned the remaining policy numbers (alert severity bands, disposition tiering, proximity
       weighting, PII jurisdictions, eval thresholds) with your compliance function.
@@ -197,6 +197,6 @@ the moment a narration adapter is added and a transcript reaches it: see rule R1
 - [ ] Rebuilt the eval golden set for your calibration.
 - [ ] Reviewed the deploy posture (Dockerfile, Terraform, `retention_days`, bind address) and
       decided how you will close out `managed_readiness.py`.
-- [ ] Wired your Hrz7 review endpoint and confirmed that STOR filing stays a human act there.
+- [ ] Wired your `human-review-console` review endpoint and confirmed that STOR filing stays a human act there.
 - [ ] Read [`model-card.md`](model-card.md) before adding any narration seam.
 - [ ] Recorded your baseline upstream tag so you can take future fixes.

@@ -45,7 +45,7 @@ narration seam would go and the eight boundary rules it would have to meet.
 ### What will it refuse to do?
 
 - **It will not file a STOR.** `Disposition.FILE_STOR` is a RECOMMENDATION. It sets
-  `requires_human_review` and is ROUTED to the Hrz7 console in the same call that produced it
+  `requires_human_review` and is ROUTED to the `human-review-console` in the same call that produced it
   (rule R8). Filing is a human act, always.
 - **It will not carry a threshold in the engine.** Every detector number comes from the
   adopter-owned pack, and the loader is fail-closed: a missing file, an unknown detector, a
@@ -82,16 +82,16 @@ on the A2A card at `/.well-known/agent-card.json`.
 
 | Concern | Owner | How this repo touches it |
 |---|---|---|
-| The abuse detectors, the comms scan, the proximity graph and the disposition | **this repo (Cmp1)** | the deterministic engines in `domain/`. Nothing else in the catalog computes them. |
-| The surveillance cue lexicon | **this repo (Cmp1)** | `domain/lexicon.py`. The words are reviewed vertical policy and live here deliberately, so changing them needs no release of a shared package. |
-| Restricted lists, blackout windows and MNPI reference | **Rgc11** conflicts, gifts and PAD register | read over `RestrictedReferencePort` as a dated snapshot. This repo scores against it; it does not keep a second register. |
+| The abuse detectors, the comms scan, the proximity graph and the disposition | **this repo (`trade-comms-surveillance`)** | the deterministic engines in `domain/`. Nothing else in the catalog computes them. |
+| The surveillance cue lexicon | **this repo (`trade-comms-surveillance`)** | `domain/lexicon.py`. The words are reviewed vertical policy and live here deliberately, so changing them needs no release of a shared package. |
+| Restricted lists, blackout windows and MNPI reference | `conflicts-gifts-pad-register` conflicts, gifts and PAD register | read over `RestrictedReferencePort` as a dated snapshot. This repo scores against it; it does not keep a second register. |
 | Transcription, diarization and the transcript types | **`speech-lexicon-kit`** (shared commons) | re-exported through `ports/comms.py` so a citation of "turn 7" means the same thing in every repo that reads recorded comms. The kit matches; this repo owns the words. Streaming speech to text is deliberately out of scope; post-trade review is batch. |
-| Agent discovery and entitlements | **Hrz3** agent registry | this agent publishes a card; the registry owns discovery. |
-| Model and agent promotion | **Hrz4** AI quality and model risk | `eval/run_eval.py --mode gate` asks Hrz4 (`TRADECOMMS_QUALITY_URL`); the offline smoke mode never promotes. |
-| Traces and the immutable audit sink | **Hrz5** agent observability | `AuditSinkPort` and `ObservabilityTracerPort`; the managed tracer exports OTLP to the Hrz5 collector when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. |
-| Case review, maker-checker and STOR filing | **Hrz7** human review console | `ReviewRouterPort` over the shared `review-kit` (`HUMAN_REVIEW_URL`). This repo produces recommendations; a human files from there. |
-| Prompt-injection defence and output filtering | **Hrz1** agent guardrail gateway | not wired, and not engaged today because no model is in the path. It becomes mandatory the moment a narration adapter is added and a transcript could reach it (rule R1). |
-| Grounded retrieval over an enterprise corpus | **Hrz2** enterprise knowledge base | not wired and not in the request path. The regulator instruments this engine cites come from the threshold pack, not from retrieval. |
+| Agent discovery and entitlements | `agent-registry` | this agent publishes a card; the registry owns discovery. |
+| Model and agent promotion | `model-quality-gate` AI quality and model risk | `eval/run_eval.py --mode gate` asks `model-quality-gate` (`TRADECOMMS_QUALITY_URL`); the offline smoke mode never promotes. |
+| Traces and the immutable audit sink | `agent-observability` agent observability | `AuditSinkPort` and `ObservabilityTracerPort`; the managed tracer exports OTLP to the `agent-observability` collector when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. |
+| Case review, maker-checker and STOR filing | `human-review-console` human review console | `ReviewRouterPort` over the shared `review-kit` (`HUMAN_REVIEW_URL`). This repo produces recommendations; a human files from there. |
+| Prompt-injection defence and output filtering | `agent-guardrail-gateway` agent guardrail gateway | not wired, and not engaged today because no model is in the path. It becomes mandatory the moment a narration adapter is added and a transcript could reach it (rule R1). |
+| Grounded retrieval over an enterprise corpus | `enterprise-knowledge-base` | not wired and not in the request path. The regulator instruments this engine cites come from the threshold pack, not from retrieval. |
 
 ### Can I demo it without a cloud project?
 
@@ -110,4 +110,4 @@ rows in [`../../COMPLIANCE.md`](../../COMPLIANCE.md). The three that matter most
 decision: the managed adapter family is construction-only (six operations are listed in
 `src/trade_comms_surveillance/managed_readiness.py`, and both the container preflight and the
 Terraform serving edge refuse while they are), the market-abuse engine has no HTTP route yet, and
-the Hrz4 metric bundle is not registered so `--mode gate` has no authority to ask.
+the `model-quality-gate` metric bundle is not registered so `--mode gate` has no authority to ask.

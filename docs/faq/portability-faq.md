@@ -24,7 +24,7 @@ fixed when a defect is found.
 | Profile | What it is | Who it is for |
 |---|---|---|
 | `local` | SDK-free offline stack: seeded dev personas, a hash-chained SQLite WORM audit log, a deterministic fictional book replay with seeded abuse episodes, fixture restricted-reference and comms feeds, an in-memory case store | dev, test, CI, and the offline demo |
-| `gcp` | the managed stack: IAP identity, Cloud Logging WORM, Cloud Trace or OTLP to Hrz5, the Hrz4 gate client and the Hrz7 review client. The vertical's own data adapters (BigQuery market data, the managed comms-transcript store, the Rgc11 A2A reference feed, the Firestore case store) are construction-only placeholders that raise | a managed deployment, once those six operations are implemented |
+| `gcp` | the managed stack: IAP identity, Cloud Logging WORM, Cloud Trace or OTLP to `agent-observability`, the `model-quality-gate` client and the `human-review-console` review client. The vertical's own data adapters (BigQuery market data, the managed comms-transcript store, the `conflicts-gifts-pad-register` A2A reference feed, the Firestore case store) are construction-only placeholders that raise | a managed deployment, once those six operations are implemented |
 | `onprem` | fail-fast `NotImplementedError` placeholders | the sovereign exit: a client binds its own in-country implementations here |
 
 `TRADECOMMS_PROFILE` selects the family. Unset means the offline adapters bind but nobody chose
@@ -70,7 +70,7 @@ pure stdlib and moves unchanged; what you implement is one adapter per port unde
 
 The identity adapter (your IdP rather than IAP), the audit sink (your WORM store), the market
 data source (your order and trade warehouse rather than BigQuery), the comms feed (your recording
-archive), the restricted-reference client (your own register rather than Rgc11), the case store
+archive), the restricted-reference client (your own register rather than `conflicts-gifts-pad-register`), the case store
 (your database) and the review router (your maker-checker queue). The evaluation port is the one
 that deliberately REFUSES to promote off the managed profile: a promotion certified by a laptop
 with no quality service is certified by nothing.

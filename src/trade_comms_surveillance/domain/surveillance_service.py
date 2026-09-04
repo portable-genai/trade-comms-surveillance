@@ -2,9 +2,9 @@
 
 The consequential outputs (every abuse score, the case severity and the close/escalate/file-STOR
 disposition) are pure stdlib and replayable from ``as_of``. A model narrates elsewhere and never
-produces a number or a verdict. PII is redacted BEFORE the audit write (R1/P-04), every case
-carries citations, and a consequential case sets ``requires_human_review`` and is routed to Hrz7
-by the driving layer (rule R8) rather than auto-executed.
+produces a number or a verdict. PII is redacted BEFORE the audit write (R1/P-04), every case carries
+citations, and a consequential case sets ``requires_human_review`` and is routed to
+human-review-console by the driving layer (rule R8) rather than auto-executed.
 
 The disposition tiering is deterministic policy: a fired CRITICAL abuse signal, or a tipping cue
 corroborated by a fired trading signal, recommends a STOR filing; any other fired signal or a

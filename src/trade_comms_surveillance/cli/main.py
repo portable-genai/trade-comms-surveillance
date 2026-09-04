@@ -60,13 +60,17 @@ def main(argv: list[str] | None = None) -> int:
     alert.add_argument("subject")
     alert.add_argument("text")
     alert.add_argument("--actor", default="cli-user@bank.example")
-    alert.add_argument("--tenant", default="", help="Tenant partition asserted to Hrz7.")
+    alert.add_argument(
+        "--tenant", default="", help="Tenant partition asserted to human-review-console."
+    )
 
     surveil = sub.add_parser("surveil", help="Run the market-abuse engine over an instrument.")
     surveil.add_argument("instrument", help="A seeded instrument, e.g. SPOOF.SG / INSIDE.SG.")
     surveil.add_argument("--subject", default="trader-a", help="Account under review.")
     surveil.add_argument("--actor", default="cli-user@bank.example")
-    surveil.add_argument("--tenant", default="", help="Tenant partition asserted to Hrz7.")
+    surveil.add_argument(
+        "--tenant", default="", help="Tenant partition asserted to human-review-console."
+    )
 
     args = parser.parse_args(argv)
     if args.command == "alert":

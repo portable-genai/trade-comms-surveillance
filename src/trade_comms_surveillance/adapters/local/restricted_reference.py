@@ -1,8 +1,8 @@
 """Local RestrictedReferencePort: the fixture-backed reference snapshot (the day-one binding).
 
 Serves the seeded :class:`RestrictedReference` from ``_fixtures.py``. Inside the wave the managed
-family switches to Rgc11's A2A feed behind this same port (slice 8); until then this fixture IS
-the reference, and the wire schema is whatever this port defines.
+family switches to conflicts-gifts-pad-register's A2A feed behind this same port (slice 8); until
+then this fixture IS the reference, and the wire schema is whatever this port defines.
 """
 
 from __future__ import annotations

@@ -1,4 +1,4 @@
-"""Trade Comms Surveillance (Cmp1).
+"""Trade Comms Surveillance (trade-comms-surveillance).
 
 Post-trade market-abuse and trade-comms surveillance with cited, human-reviewed STOR cases.
 

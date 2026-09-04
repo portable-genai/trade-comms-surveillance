@@ -1,4 +1,4 @@
-# Market-abuse detection thresholds for Trade Comms Surveillance (Cmp1).
+# Market-abuse detection thresholds for Trade Comms Surveillance (trade-comms-surveillance).
 #
 # Policy, not algorithm: which abnormal return is suspicious, which cancellation-ratio z-score
 # is layering, and how large a self-cross matters are the ADOPTER's numbers, and a compliance
