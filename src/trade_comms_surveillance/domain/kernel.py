@@ -67,7 +67,8 @@ class Disposition(LenientStrEnum):
     The tier is owned by pure code, never by a model: ``CLOSE`` closes the alert with no human
     action, ``ESCALATE`` routes to a conduct analyst, and ``FILE_STOR`` recommends a Suspicious
     Transaction and Order Report. Filing is always a human act, so ``FILE_STOR`` is a
-    RECOMMENDATION that sets ``requires_human_review`` and routes to Hrz7; the engine never files.
+    RECOMMENDATION that sets ``requires_human_review`` and routes to human-review-console; the
+    engine never files.
     """
 
     CLOSE = "close"

@@ -1,4 +1,4 @@
-# Model card: Trade Comms Surveillance (Cmp1)
+# Model card: Trade Comms Surveillance (`trade-comms-surveillance`)
 
 **There is no model in this system.** Not a stubbed one, not an unwired one: this repo has no
 generation port, no narration port, no LLM port and no model seam of any kind. The pipeline is
@@ -73,7 +73,7 @@ boundary rules it inherits, none of which are optional:
    construction.
 4. **Untrusted text is screened first (rule R1).** A recorded-comms transcript is the most
    hostile input surface in this catalog: it is free text written by the people under
-   surveillance. Bind the Hrz1 guardrail gateway for prompt-injection screening and output
+   surveillance. Bind the `agent-guardrail-gateway` for prompt-injection screening and output
    filtering, and fail closed to deterministic-only when the screen is unavailable.
 5. **Redact before the model, not only before the audit write.** Redaction already runs before
    the audit write in `surveillance_service.assess` and before a review payload leaves the
@@ -83,13 +83,13 @@ boundary rules it inherits, none of which are optional:
    trace attributes STRUCTURAL: a trace backend has no redaction stage, a wider read audience and
    no retention rule written against a regulator's requirement. A narration adapter must not
    put a prompt or a reply on a span.
-7. **It is registered with Hrz4 before promotion (rule R5, P-08).** Add a managed-profile eval
+7. **It is registered with `model-quality-gate` before promotion (rule R5, P-08).** Add a managed-profile eval
    run that scores narrative groundedness against the same golden cases with the real model
    bound. Note that `adapters/gcp/evaluation.py` and `eval/run_eval.py` already record
    `gemini-3.5-flash` as the model a promotion verdict is keyed to; today that is bookkeeping for
    a model that makes no call, and it would become a real pin that must match what is bound.
 8. **A STOR is still filed by a human.** `Disposition.FILE_STOR` is a RECOMMENDATION. It sets
-   `requires_human_review` and routes to Hrz7 (rule R8) in the same call. No narration may change
+   `requires_human_review` and routes to `human-review-console` (rule R8) in the same call. No narration may change
    that, and no narration may be the thing a filing decision rests on.
 
 ## What this means for a model-risk review today

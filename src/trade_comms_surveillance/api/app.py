@@ -1,4 +1,4 @@
-"""FastAPI application for Trade Comms Surveillance (Cmp1).
+"""FastAPI application for Trade Comms Surveillance (trade-comms-surveillance).
 
 Import-safe (the Container is built at request time, never at import; only ``Settings`` is read
 at import, to learn which identity adapter is bound, and no adapter is constructed), identity is
@@ -282,7 +282,8 @@ def surveil(
 ) -> SurveillanceResponse:
     """Assess a manual conduct alert; the audit actor is the verified principal, never the body.
 
-    Rule R8: a case that sets ``requires_human_review`` is ROUTED to the Hrz7 console here, in the
+    Rule R8: a case that sets ``requires_human_review`` is ROUTED to the human-review-console here,
+    in the
     same request that produced it. Setting the flag is not the escalation; routing is. The maker
     is the verified principal, so the console records who originated the decision. The structured
     market-abuse engine is exercised through the CLI, the agent tool and the eval.

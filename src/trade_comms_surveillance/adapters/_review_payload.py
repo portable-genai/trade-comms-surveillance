@@ -2,11 +2,11 @@
 
 Lives in the adapter layer, not the pure domain, because it depends on the kit. The subject, the
 summary and EVERY field of every citation (the locator and the title, not only the snippet) are
-redacted BEFORE they leave the process (the same redact-before-anything rule the audit write
-obeys), using the shared ``pii-kit``, so no raw identifier reaches Hrz7 over the wire; Hrz7
-redacts again before its own audit write (defence in depth). ``maker`` and ``tenant`` are
-asserted here and trusted by Hrz7 because the caller is an authenticated S2S service; per-hop
-on-behalf-of token exchange is the deferred next layer.
+redacted BEFORE they leave the process (the same redact-before-anything rule the audit write obeys),
+using the shared ``pii-kit``, so no raw identifier reaches human-review-console over the wire;
+human-review-console redacts again before its own audit write (defence in depth). ``maker`` and
+``tenant`` are asserted here and trusted by human-review-console because the caller is an
+authenticated S2S service; per-hop on-behalf-of token exchange is the deferred next layer.
 """
 
 from __future__ import annotations
@@ -70,7 +70,7 @@ def _kit_citations(result: SurveillanceCase) -> tuple[KitCitation, ...]:
 
 
 def result_to_review(result: SurveillanceCase, *, maker: str, tenant: str = "") -> Review:
-    """Build the review a producer submits to Hrz7 when a case is consequential.
+    """Build the review a producer submits to human-review-console when a case is consequential.
 
     The case id is redacted ONCE and reused for the case reference and the idempotency key, so no
     raw identifier reaches the wire through a derived field. Neither may carry it RAW while
@@ -99,6 +99,6 @@ def result_to_review(result: SurveillanceCase, *, maker: str, tenant: str = "") 
         sod_group="trade_comms_surveillance-maker-checker",
         case_ref=case_ref,
         # Producer-owned, tenant-scoped key so a retried delivery is idempotent at the console.
-        source_key=f"Cmp1:{case_ref}:{result.severity.value}",
+        source_key=f"trade-comms-surveillance:{case_ref}:{result.severity.value}",
         citations=_kit_citations(result),
     )

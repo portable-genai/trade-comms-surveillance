@@ -1,6 +1,6 @@
 # ui: the embeddable micro-frontend
 
-A Next.js App Router console for Trade Comms Surveillance (Cmp1).
+A Next.js App Router console for Trade Comms Surveillance (`trade-comms-surveillance`).
 It runs standalone for a demo and embeds into a client's existing web application as an iframe,
 with the same security posture either way.
 

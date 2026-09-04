@@ -31,7 +31,7 @@ happens in the same call that produced it (rule R8), on every surface, with
 `tests/unit/test_review_routing.py` asserting the routing rather than the flag. A CRITICAL band
 demands two approvals. Under the managed profile the router REFUSES when no console is
 configured, so a deployment cannot swallow an escalation silently. The filing itself happens in
-Hrz7, by a named person.
+`human-review-console`, by a named person.
 
 ### How is the disposition tier decided?
 
@@ -105,7 +105,7 @@ lexicon phrases, the disposition tiering and the alert severity bands. The offli
 (`eval/run_eval.py --mode smoke`) scores `disposition_accuracy`, `review_safety`, `groundedness`
 and `pii_safety` on every change against the dataset's own expected outcomes, and every metric is
 proved able to go red. If a narration adapter is ever proposed, the model card lists the eight
-conditions it must satisfy first, and Hrz1 prompt-injection screening is one of them because a
+conditions it must satisfy first, and `agent-guardrail-gateway` prompt-injection screening is one of them because a
 transcript is free text written by the people under surveillance.
 
 ### Which regulations does this claim to satisfy?
@@ -125,6 +125,6 @@ The `Partial` and `TODO (repo owner)` rows in `COMPLIANCE.md`, each of which nam
 is missing. The ones that need a risk acceptance if you go live without them: the six
 construction-only managed operations in `src/trade_comms_surveillance/managed_readiness.py`
 (which the container preflight and the Terraform serving-edge check currently refuse to let you
-deploy past), rule R5 and P-08 (the Hrz4 metric bundle), P-10 (timeouts, circuit breaker and a
+deploy past), rule R5 and P-08 (the `model-quality-gate` metric bundle), P-10 (timeouts, circuit breaker and a
 documented kill switch), the object-level tenant authorisation noted in the cross-cutting table,
 and P-01's private-egress rule, which depends on your own network rather than on this repo.

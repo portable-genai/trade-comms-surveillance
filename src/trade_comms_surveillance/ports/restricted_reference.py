@@ -1,10 +1,11 @@
 """RestrictedReferencePort: the restricted-list / blackout / MNPI reference boundary (slice 4).
 
-The reference data is a DATA boundary owned by Rgc11 (the conflicts/gifts/PAD register); Cmp1
-reads it. Day one the offline family is fixture-backed; inside the wave the managed family calls
-Rgc11 over A2A behind this unchanged port (slice 8). The on-prem family fails fast. Every snapshot
-is dated so an ``as_of`` replay reproduces the same verdict: the same window plus the same
-reference yields the same disposition, byte for byte.
+The reference data is a DATA boundary owned by conflicts-gifts-pad-register (the conflicts/gifts/PAD
+register); trade-comms-surveillance reads it. Day one the offline family is fixture-backed; inside
+the wave the managed family calls conflicts-gifts-pad-register over A2A behind this unchanged port
+(slice 8). The on-prem family fails fast. Every snapshot is dated so an ``as_of`` replay reproduces
+the same verdict: the same window plus the same reference yields the same disposition, byte for
+byte.
 """
 
 from __future__ import annotations

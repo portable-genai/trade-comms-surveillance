@@ -3,8 +3,8 @@
 Not pure domain (it reaches ports and the redactor), and not a driving adapter (it has no
 transport). It is the one place that wires the market-data, restricted-reference and comms feeds
 into a :class:`SurveillanceRequest`, runs the deterministic engine, persists the case and routes a
-consequential one to Hrz7 (rule R8) in the same call. The CLI, the agent tool, the eval and the
-demo all call it, so the pipeline exists in exactly one place rather than four.
+consequential one to human-review-console (rule R8) in the same call. The CLI, the agent tool, the
+eval and the demo all call it, so the pipeline exists in exactly one place rather than four.
 
 Comms transcripts are redacted with ``pii-kit`` before anything downstream could reach a model
 (P-04); the deterministic lexicon scan finds cue phrases either way, and no raw identifier travels

@@ -7,7 +7,7 @@ here. Read it first. This file carries only what is specific to this one.
 
 ## What this is
 
-Trade Comms Surveillance (Cmp1): Post-trade market-abuse and trade-comms surveillance with cited, human-reviewed STOR cases.
+Trade Comms Surveillance (`trade-comms-surveillance`): Post-trade market-abuse and trade-comms surveillance with cited, human-reviewed STOR cases.
 Rendered from `hex-service-template`, so it starts at reference parity rather than converging
 toward it. Package `trade_comms_surveillance`, environment prefix
 `TRADECOMMS`, region `asia-southeast1`.

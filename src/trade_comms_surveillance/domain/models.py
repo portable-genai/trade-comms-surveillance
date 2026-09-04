@@ -123,7 +123,8 @@ class BlackoutWindow:
 class RestrictedReference:
     """The as-of snapshot of restricted-list, blackout and MNPI-holdings data the engine reads.
 
-    This is a data boundary owned by Rgc11; Cmp1 reads it. Every field is dated so an ``as_of``
+    This is a data boundary owned by conflicts-gifts-pad-register; trade-comms-surveillance reads
+    it. Every field is dated so an ``as_of``
     replay reproduces the same verdict. ``mnpi_holders`` maps an account to the instruments it is
     recorded as holding material non-public information about.
     """

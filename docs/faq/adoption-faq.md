@@ -12,7 +12,7 @@ variable names on the service), the Terraform `name_prefix` resource stem (`cmp1
 distribution / git id in one pass. Preview with `--dry-run`, apply with `--yes`, then recreate
 the venv, `make install`, and run `make gate`. `--resource` is validated against the same
 `^[a-z][a-z0-9-]{2,18}$` regex the Terraform variable enforces, so a bad stem fails here rather
-than at plan time. The catalog id `Cmp1` is left alone unless you pass `--catalog-id`, so a fork
+than at plan time. The catalog id `trade-comms-surveillance` is left alone unless you pass `--catalog-id`, so a fork
 stays traceable to the entry it descends from. The script does the mechanical rename; the human
 decisions (threshold pack, lexicon, region, IdP, feeds, eval golden set) are the checklist in
 `ADOPTING.md`.
@@ -37,10 +37,10 @@ Five things, and the first four are not code here:
 2. **Your cue lexicon.** `domain/lexicon.py` ships three obviously illustrative families
    (tipping, collusion, off-channel). A real detection vocabulary is reviewed policy.
 3. **The reference data.** `RestrictedReferencePort` reads the restricted-list, blackout and MNPI
-   snapshot. Point it at Rgc11 or at your own register. Do not keep a second one here.
+   snapshot. Point it at `conflicts-gifts-pad-register` or at your own register. Do not keep a second one here.
 4. **The feeds.** A real order and trade warehouse behind `MarketDataPort`, and a real recorded
    comms archive behind `CommsFeedPort`. Offline both are deterministic fictional fixtures.
-5. **The review console.** An Hrz7 deployment reachable at `HUMAN_REVIEW_URL`. The managed
+5. **The review console.** An `human-review-console` deployment reachable at `HUMAN_REVIEW_URL`. The managed
    router REFUSES to swallow an escalation when this is empty, so a fork cannot ship rule R8
    unwired and green.
 
@@ -48,7 +48,7 @@ Five things, and the first four are not code here:
 
 Six operations, listed by name in `src/trade_comms_surveillance/managed_readiness.py`: the three
 Firestore case-store methods, the BigQuery market-data window, the managed comms-transcript feed
-and the Rgc11 reference snapshot. Two things follow. The container command and the API preflight
+and the `conflicts-gifts-pad-register` reference snapshot. Two things follow. The container command and the API preflight
 refuse to start a `gcp` process whose bindings select any of them, and
 `infra/terraform/managed_readiness.tf` refuses to authorise the serving edge. That is
 deliberate, and in a surveillance engine it is a safety control rather than tidiness: a market
@@ -114,6 +114,6 @@ rebuilding them for your calibration is adoption step 7.
 [`../practices-audit.md`](../practices-audit.md) carries the per-check verdict and the work list.
 The three that matter most before production: implementing the six managed operations, exposing
 the market-abuse engine on an HTTP route (today only the alert-intake path has one), and
-registering this repo's metric bundle with Hrz4 so `eval/run_eval.py --mode gate` has an
+registering this repo's metric bundle with `model-quality-gate` so `eval/run_eval.py --mode gate` has an
 authority to ask. The Terraform stack is written, validated and tested against a mocked provider;
 it has never been applied.
