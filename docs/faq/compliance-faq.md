@@ -29,8 +29,10 @@ A human, always. `Disposition.FILE_STOR` is a RECOMMENDATION, and
 consequential disposition sets `requires_human_review` and the call to `ReviewRouterPort.route`
 happens in the same call that produced it (rule R8), on every surface, with
 `tests/unit/test_review_routing.py` asserting the routing rather than the flag. A CRITICAL band
-demands two approvals. Under the managed profile the router REFUSES when no console is
-configured, so a deployment cannot swallow an escalation silently. The filing itself happens in
+demands two approvals. Under the managed profile a deployment with
+routing on and no console configured REFUSES TO BOOT, and a hand-off that fails at request time
+is reported to the caller as `review_routing: "failed"` and logged, so an escalation is never
+swallowed silently. `TRADECOMMS_REVIEW_ROUTING=off` switches routing off, and every result then says so. The filing itself happens in
 `human-review-console`, by a named person.
 
 ### How is the disposition tier decided?

@@ -21,6 +21,7 @@ from typing import TYPE_CHECKING, Any
 from hex_service_kit.serialization import to_jsonable
 from pii_kit import redact
 
+from ..adapters.controls import RecordingReviewRouter
 from ..config import Container, Settings, build_container
 from ..domain.alert_intake_service import AlertIntakeService
 from ..domain.models import AlertInput
@@ -80,20 +81,21 @@ def assess_alert(
 
     Returns:
       A JSON-safe case dict with every string masked for personal data (P-04: a tool result goes
-      into a model's context), plus ``review_ref``: where the escalation WENT. It is empty only
-      when the case did not escalate.
+      into a model's context), plus ``review_ref``: where the escalation WENT (empty unless it
+      was routed), and ``review_routing``: ``routed``, ``failed`` (NOT queued for review),
+      ``off`` or ``not_required``.
     """
     container = _container(settings)
     result = AlertIntakeService(container.audit, tracer=container.tracer).assess(
         AlertInput(subject=subject, text=text), actor=actor
     )
-    review_ref = ""
-    if result.requires_human_review:
-        review_ref = container.review_router.route(result, maker=actor, tenant=tenant)
+    routing = RecordingReviewRouter(container.review_router)
+    review_ref = routing.route(result, maker=actor, tenant=tenant)
     payload = _redacted(to_jsonable(result))
     if not isinstance(payload, dict):  # pragma: no cover - dataclasses serialise to objects
         raise TypeError("a case must serialise to a JSON object")
     payload["review_ref"] = review_ref
+    payload["review_routing"] = routing.outcome.value
     return payload
 
 
@@ -117,7 +119,8 @@ def assess_window(
       tenant: Tenant partition asserted on an outbound review.
 
     Returns:
-      A JSON-safe case dict (strings masked for personal data), plus ``review_ref``.
+      A JSON-safe case dict (strings masked for personal data), plus ``review_ref`` and
+      ``review_routing``.
     """
     container = _container(settings)
     thresholds = thresholds_for(container.settings)
@@ -128,6 +131,7 @@ def assess_window(
     if not isinstance(payload, dict):  # pragma: no cover - dataclasses serialise to objects
         raise TypeError("a case must serialise to a JSON object")
     payload["review_ref"] = outcome.review_ref
+    payload["review_routing"] = outcome.review_routing
     return payload
 
 
