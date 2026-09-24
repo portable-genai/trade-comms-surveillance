@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from .adapters.controls import RecordingReviewRouter, ReviewRouting
 from .config import Container
 from .domain.abuse_patterns import PatternThresholds
 from .domain.comms_scan import scan_transcript
@@ -29,6 +30,9 @@ class AssessmentOutcome:
 
     case: SurveillanceCase
     review_ref: str
+    #: What happened to the hand-off: routed, failed, off or not_required. ``failed`` means the
+    #: case is NOT queued for review; the failure was logged rather than failing the assessment.
+    review_routing: str = ReviewRouting.NOT_REQUIRED.value
 
 
 def _comms_hits(container: Container, comms_key: str) -> tuple[CommsHit, ...]:
@@ -76,10 +80,13 @@ def assess_instrument(
     case = service.assess(request, actor=actor)
     container.case_store.put(case)
 
-    review_ref = ""
-    if route and case.requires_human_review:
-        review_ref = container.review_router.route(case, maker=actor, tenant=case.tenant)
-    return AssessmentOutcome(case=case, review_ref=review_ref)
+    if not route:
+        return AssessmentOutcome(case=case, review_ref="")
+    # The hand-off never fails an already-scored, already-audited case; the outcome says what
+    # happened to it instead (the fleet's runtime-control contract).
+    routing = RecordingReviewRouter(container.review_router)
+    review_ref = routing.route(case, maker=actor, tenant=case.tenant)
+    return AssessmentOutcome(case=case, review_ref=review_ref, review_routing=routing.outcome.value)
 
 
 def read_case(

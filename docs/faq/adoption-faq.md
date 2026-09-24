@@ -40,9 +40,9 @@ Five things, and the first four are not code here:
    snapshot. Point it at `conflicts-gifts-pad-register` or at your own register. Do not keep a second one here.
 4. **The feeds.** A real order and trade warehouse behind `MarketDataPort`, and a real recorded
    comms archive behind `CommsFeedPort`. Offline both are deterministic fictional fixtures.
-5. **The review console.** An `human-review-console` deployment reachable at `HUMAN_REVIEW_URL`. The managed
-   router REFUSES to swallow an escalation when this is empty, so a fork cannot ship rule R8
-   unwired and green.
+5. **The review console.** An `human-review-console` deployment reachable at `HUMAN_REVIEW_URL`. With review routing
+   on (the default), the managed profile REFUSES TO BOOT when this is empty, so a fork cannot ship
+   rule R8 unwired and green; `TRADECOMMS_REVIEW_ROUTING=off` is the stated way to run without it.
 
 ### The `gcp` adapters raise. How much work is that, really?
 

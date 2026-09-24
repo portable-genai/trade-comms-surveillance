@@ -7,6 +7,7 @@ import sys
 
 from hex_service_kit.logging import configure_logging
 
+from ..adapters.controls import RecordingReviewRouter
 from ..config import build_container
 from ..domain.alert_intake_service import AlertIntakeService
 from ..domain.models import AlertInput
@@ -22,10 +23,10 @@ def _run_alert(args: argparse.Namespace) -> int:
     case = service.assess(AlertInput(subject=args.subject, text=args.text), actor=args.actor)
     print(f"{case.subject}: {case.severity.value} ({case.disposition.value})")
     print(f"  requires_human_review: {case.requires_human_review}")
-    if case.requires_human_review:
-        # Rule R8 on the CLI path too: the same escalation, the same router.
-        ref = container.review_router.route(case, maker=args.actor, tenant=args.tenant)
-        print(f"  routed to human review: {ref}")
+    # Rule R8 on the CLI path too: the same escalation, the same router.
+    routing = RecordingReviewRouter(container.review_router)
+    ref = routing.route(case, maker=args.actor, tenant=args.tenant)
+    print(f"  human review hand-off : {routing.outcome.value} {ref}".rstrip())
     return 0
 
 
@@ -47,8 +48,7 @@ def _run_surveil(args: argparse.Namespace) -> int:
     for hit in case.comms_hits:
         print(f"  COMMS {hit.lexicon}@turn{hit.turn_index}: {hit.snippet!r}")
     print(f"  requires_human_review: {case.requires_human_review}")
-    if outcome.review_ref:
-        print(f"  routed to human review: {outcome.review_ref}")
+    print(f"  human review hand-off : {outcome.review_routing} {outcome.review_ref}".rstrip())
     return 0
 
 

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Literal
+
 from pydantic import BaseModel
 
 from ..domain.models import SurveillanceCase
@@ -27,14 +29,21 @@ class SurveillanceResponse(BaseModel):
     summary: str
     requires_human_review: bool
     #: Where the escalation WENT (rule R8): the human-review-console review id, or the local queue
-    #: reference.
-    #: Empty only when the case did not escalate. A caller can tell a routed escalation from a
-    #: flag that stopped here, which is the whole point of the rule.
+    #: reference. Empty exactly when ``review_routing`` is not ``routed``.
     review_ref: str = ""
+    #: What happened to the hand-off: routed, failed, off or not_required. ``failed`` means the
+    #: case is NOT queued for review, and the console says so.
+    review_routing: Literal["routed", "failed", "off", "not_required"] = "not_required"
     citations: list[CitationModel] = []
 
     @classmethod
-    def from_domain(cls, result: SurveillanceCase, *, review_ref: str = "") -> SurveillanceResponse:
+    def from_domain(
+        cls,
+        result: SurveillanceCase,
+        *,
+        review_ref: str = "",
+        review_routing: str = "not_required",
+    ) -> SurveillanceResponse:
         return cls(
             case_id=result.case_id,
             subject=result.subject,
@@ -44,6 +53,7 @@ class SurveillanceResponse(BaseModel):
             summary=result.summary,
             requires_human_review=result.requires_human_review,
             review_ref=review_ref,
+            review_routing=review_routing,  # type: ignore[arg-type]
             citations=[
                 CitationModel(source_id=c.source_id, title=c.title, snippet=c.snippet)
                 for c in result.citations
