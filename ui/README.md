@@ -158,7 +158,7 @@ assertion, and this UI discards those.
 | `lib/server/identity.ts` | The only place an actor is decided. Never reads a browser-supplied value except the validated dev persona. |
 | `app/api/agent/[...path]/route.ts` | The same-origin reverse proxy: strip, resolve, forward, answer. |
 | `proxy.ts` | The document-layer header baseline on every response. |
-| `app/page.tsx` | The console itself. It reads the service's agent card for its own title, so no product name is hardcoded here. |
+| `app/page.tsx` | The console itself. It reads the service's agent card for its own title, so no product name is hardcoded here. Its one action is `POST /v1/surveil` with `{ subject, text }`: the trader and desk, and the communication to assess. It is prefilled with a fictional chat line the local profile scores critical, so the default submit shows a recommended STOR routed to the review console. `tests/unit/test_console_matches_api.py` holds every console call to the served routes and request models. |
 | `tests/` | Node tests for the policy modules, plus the scanner that fails the build on a two-state environment read anywhere in `ui/`. No browser engine, so they run anywhere. |
 
 ## Bounds of this UI

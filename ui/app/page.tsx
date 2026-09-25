@@ -36,8 +36,12 @@ interface CardSummary {
 
 export default function Home() {
   const [persona, setPersona] = useState(PERSONAS[0]);
-  const [subject, setSubject] = useState("Acme Holdings (FICTIONAL)");
-  const [text, setText] = useState("urgent data breach reported by the branch");
+  // Prefilled with a FICTIONAL chat line that the local profile's keyword bands score critical, so
+  // the default submit shows a real hit: a recommended STOR, routed to the review console.
+  const [subject, setSubject] = useState("trader-a, SGX equities desk (FICTIONAL)");
+  const [text, setText] = useState(
+    "Got the INSIDE.SG results early from my contact at the issuer, pure MNPI. Load up before the announcement and keep it off the recorded line.",
+  );
   const [result, setResult] = useState("");
   const [failed, setFailed] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -62,7 +66,7 @@ export default function Home() {
     setBusy(true);
     setFailed(false);
     try {
-      const response = await fetch(API + "/v1/triage", {
+      const response = await fetch(API + "/v1/surveil", {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-Dev-Persona": persona },
         body: JSON.stringify({ subject, text }),
@@ -83,7 +87,7 @@ export default function Home() {
       <h1>{card?.name ?? "Agent console"}</h1>
       <p className="sub">
         {card?.description ??
-          "Submit a case. The decision is deterministic, cited, and routed to a human reviewer when it escalates."}
+          "Surveil a trader communication. The decision is deterministic, cited, and routed to a human reviewer when it escalates."}
       </p>
 
       <form onSubmit={submit}>
@@ -102,17 +106,17 @@ export default function Home() {
         </fieldset>
 
         <fieldset>
-          <legend>The case</legend>
+          <legend>The communication</legend>
           <label>
-            Subject
+            Trader and desk
             <input value={subject} onChange={(event) => setSubject(event.target.value)} />
           </label>
           <label>
-            Description
+            Communication text (chat, email or call note)
             <textarea value={text} onChange={(event) => setText(event.target.value)} />
           </label>
           <button type="submit" disabled={busy}>
-            {busy ? "Working" : "Triage this case"}
+            {busy ? "Working" : "Surveil this communication"}
           </button>
         </fieldset>
       </form>
